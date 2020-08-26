@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MercadoLibre</string>
+    <string name="mercado_libre_app">Mercado Libre app.</string>
+    <string name="loading">Cargando</string>
+    <string name="search">Buscar...</string>
+    <string name="producttitle">ProductTitle</string>
+    <string name="price">Price</string>
+    <string name="a_n_no_has_realizado_busquedas">Aún no has realizado busquedas!</string>
+    <string name="acceptsmercadopago">AcceptsMercadoPago</string>
+    <string name="unidades_disponibles">Unidades disponibles</string>
+    <string name="acceptMPRes">El vendedor acepta MercadoPago</string>
+    <string name="dontAcceptMPRes">El vendedor no acepta MercadoPago</string>
+    <string name="availableQuantity">Unidades disponibles: </string>
+    <string name="productDetailTitle">Detalle del producto</string>
+    <string name="closeApp">Salir</string>
+    <string name="generic_error_title">Error!</string>
+    <string name="no_internet_message">Parece que no estas conectado a internet y nuestra App lo necesita</string>
+    <string name="no_internet_ui_message">Por Favor conectate a internet para poder comenzar a usar la aplicación.</string>
+</resources>
