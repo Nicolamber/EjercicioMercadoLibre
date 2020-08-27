@@ -8,7 +8,11 @@ import kotlinx.coroutines.withContext
 import nico.lambertucci.mercadolibre.di.Injection
 import nico.lambertucci.mercadolibre.domain.data.ProductResponse
 import nico.lambertucci.mercadolibre.domain.network.DATASOURCE_TAG
-
+/**
+ * @author Nicolas Lambertucci
+ * Implementacion de un repositorio para que si a futuro se desea consumir una API diferente o
+ * almacenamiento local, desde aca podamos realizarlo (siguiendo MVVM)
+ */
 class MeliRepositoryImpl() : MeliRepository {
 
     private val resultProductResponse = MutableLiveData<ProductResponse>()
@@ -20,6 +24,11 @@ class MeliRepositoryImpl() : MeliRepository {
         }
     }
 
+    /**
+     * Esta funcion se encarga de retornar los productos que el usuario busca
+     * @return resultProductResponse , lista de productos devuelta por la API
+     * @param product query que contiene el producto que el usuario desea
+     */
     override suspend fun getProduct(product: String): LiveData<ProductResponse> {
 
         return withContext(Dispatchers.IO) {
@@ -29,6 +38,10 @@ class MeliRepositoryImpl() : MeliRepository {
         }
     }
 
+    /**
+     * Comunicacion entre el repositorio y el dataSource que consume a la API
+     * @param product query que contiene el producto buscado
+     */
     private suspend fun getResultData(product: String) {
 
         dataSource.fetchResponse(product)
