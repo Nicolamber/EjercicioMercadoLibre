@@ -58,8 +58,9 @@ class ProductAdapters(
             /*
             * [WORKAROUND]
             * La api las devuelve con htpp y la libreria las necesita https, tambien intercepte unas
-            * urls que eran http://http2.mlstatic/path/imagen.jpg y cuando intentas acceder te dice
-            * que la pagina no existe por eso algunos productos salen como sin imagen
+            * urls que eran https://https2.mlstatic.com/D_631043-MLA42563721249_072020-I.jpg y
+            *  cuando intentas acceder te dice que la pagina no existe por eso algunos productos
+            *  salen como sin imagen
             */
             val image = item.thumbnail.replace("http","https")
 
