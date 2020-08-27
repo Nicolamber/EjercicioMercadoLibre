@@ -142,7 +142,7 @@ class ResultFragment : Fragment(), SearchUtils, LoadingBar {
         hideNoSearches()
         showLoadingBar()
         viewManager = LinearLayoutManager(requireContext())
-        viewModel.search(product)?.observe(viewLifecycleOwner, Observer {
+        viewModel.search(product).observe(viewLifecycleOwner, Observer {
             viewAdapter = ProductAdapters(it.results as ArrayList<Result>, object : ItemListener {
                 override fun onClick(v: View, item: Int) {
                     selectedProduct = it.results[item]

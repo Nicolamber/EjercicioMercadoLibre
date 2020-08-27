@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import nico.lambertucci.mercadolibre.domain.repository.MeliRepository
 
+/**
+ * @author Nicolas Lambertucci
+ * Vista que muestra un producto en detalle
+ */
 class ViewModelFactory(private val repository: MeliRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when(modelClass){

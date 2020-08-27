@@ -1,17 +1,22 @@
 package nico.lambertucci.mercadolibre.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import nico.lambertucci.mercadolibre.domain.data.ProductResponse
-import nico.lambertucci.mercadolibre.domain.network.DATASOURCE_TAG
 import nico.lambertucci.mercadolibre.domain.repository.MeliRepository
 
+/**
+ * @author Nicolas Lambertucci
+ * ViewModel asociado a la vista principal de la app.
+ */
 class ResultViewModel(private val repository: MeliRepository) : ViewModel() {
 
-    suspend fun search(product: String): LiveData<ProductResponse>? {
+    /**
+     * funcion que consume los servicios del repo injectado para obtener la lista de productos
+     * @param product producto a buscar
+     * @return LiveData<ProductResponse> Lista de productos que puede venir nula
+     */
+    suspend fun search(product: String): LiveData<ProductResponse> {
         return repository.getProduct(product)
     }
 }
