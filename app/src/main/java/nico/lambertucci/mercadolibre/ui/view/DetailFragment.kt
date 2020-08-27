@@ -7,28 +7,27 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import nico.lambertucci.mercadolibre.R
-import nico.lambertucci.mercadolibre.di.Injection
 import nico.lambertucci.mercadolibre.domain.data.Result
-import nico.lambertucci.mercadolibre.ui.viewmodel.DetailViewModel
 import java.math.BigDecimal
 import java.math.RoundingMode
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import nico.lambertucci.mercadolibre.ui.utils.LoadingBar
 
+/**
+ * @author Nicolas Lambertucci
+ * Vista que muestra un producto en detalle
+ */
 class DetailFragment : Fragment(), LoadingBar {
-
-    private lateinit var viewModel: DetailViewModel
 
     private lateinit var detailedProduct: Result
 
     private lateinit var detailToolbar: Toolbar
     private lateinit var productTitle: TextView
     private lateinit var productPrice: TextView
-    private lateinit var acceptMetcadoPago: TextView
+    private lateinit var acceptMercadoPago: TextView
     private lateinit var availableProducts: TextView
     private lateinit var imageProduct: ImageView
     private lateinit var loadingBar: ProgressBar
@@ -41,7 +40,7 @@ class DetailFragment : Fragment(), LoadingBar {
         val view = inflater.inflate(R.layout.detail_fragment, container, false)
         productTitle = view.findViewById(R.id.titleDetail)
         productPrice = view.findViewById(R.id.priceDetail)
-        acceptMetcadoPago = view.findViewById(R.id.acceptMP)
+        acceptMercadoPago = view.findViewById(R.id.acceptMP)
         availableProducts = view.findViewById(R.id.availableProd)
         imageProduct = view.findViewById(R.id.detailImage)
         detailToolbar = view.findViewById(R.id.detailToolbar)
@@ -58,32 +57,42 @@ class DetailFragment : Fragment(), LoadingBar {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this,
-            Injection.getViewModelFactory()
-        ).get(DetailViewModel::class.java)
         detailedProduct = selectedProduct
 
+        // Mientras se popula la vista con los atributos del producto, aparece una barra de carga.
         showLoadingBar()
 
+        // Inflamos el toolbar para tener la navegacion hacia atras y el titulo.
         setupToolbar(detailToolbar)
         setupView(detailedProduct)
     }
 
+    /**
+     * Funcion que se encarga de setear a cada atributo el valor correspondiente y armar la vista
+     * del detalle de un producto previamente seleccionado por el usuario.
+     * @param item producto seleccionado.
+     */
     private fun setupView(item: Result) {
         productTitle.text = item.title
 
         if (item.acceptsMercadopago) {
-            acceptMetcadoPago.text = getString(R.string.acceptMPRes)
+            acceptMercadoPago.text = getString(R.string.acceptMPRes)
         } else {
-            acceptMetcadoPago.text = getString(R.string.dontAcceptMPRes)
+            acceptMercadoPago.text = getString(R.string.dontAcceptMPRes)
         }
 
         availableProducts.text = getString(R.string.availableQuantity) + item.availableQuantity
 
         productPrice.text = setPrice(item.price)
 
+        /*
+        * [WORKAROUND]
+        * La api las devuelve con htpp y la libreria las necesita https, tambien intercepte unas
+        * urls que eran http://http2.mlstatic/path/imagen.jpg y cuando intentas acceder te dice
+        * que la pagina no existe por eso algunos productos salen como sin imagen
+        */
         val image = item.thumbnail.replace("http", "https")
+
         Glide.with(requireContext())
             .load(image)
             .centerCrop()
@@ -96,11 +105,20 @@ class DetailFragment : Fragment(), LoadingBar {
     }
 
 
+    /**
+     * Esta funcion lo que hace es parcear el precio para que se vea mas como aparece en la app de Meli
+     * dejando dos decimales despues del precio.
+     * @param price precio del producto
+     * @return String
+     */
     private fun setPrice(price: Double): String {
         val productPrice = BigDecimal(price).setScale(2, RoundingMode.HALF_EVEN)
         return "$${productPrice}"
     }
 
+    /**
+     * Dibujamos la vista del toolbar que va a tener un navigate bakc y el titulo de la vista
+     */
     private fun setupToolbar(toolbar: Toolbar) {
 
         toolbar.apply {
@@ -128,6 +146,9 @@ class DetailFragment : Fragment(), LoadingBar {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    /**
+     * metodo agregado al final, contiene la opcion de salir de la app.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.closeApp ->{ requireActivity().finish()}

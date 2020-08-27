@@ -10,10 +10,6 @@ class ViewModelFactory(private val repository: MeliRepository): ViewModelProvide
             ResultViewModel::class.java -> {
                 ResultViewModel(this.repository) as T
             }
-            DetailViewModel::class.java ->{
-                DetailViewModel(this.repository) as T
-            }
-
             else -> throw IllegalArgumentException("ViewModel Not Found")
         }
     }

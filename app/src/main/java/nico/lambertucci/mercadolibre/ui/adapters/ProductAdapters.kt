@@ -13,6 +13,11 @@ import nico.lambertucci.mercadolibre.domain.data.Result
 import nico.lambertucci.mercadolibre.ui.utils.ItemListener
 import java.math.BigDecimal
 import java.math.RoundingMode
+
+/**
+ * @author Nicolas Lambertucci
+ * adaptador para el recycler view que popula la vista cuando obtenemos un resultado
+ */
 class ProductAdapters(
     private val resultList: List<Result>,
     private val itemListener: ItemListener
@@ -50,8 +55,14 @@ class ProductAdapters(
             itemTitle.text = item.title
             itemPrice.text = parsePrice(item.price)
 
-            //La api las devuelve con htpp y la libreria las necesita https
+            /*
+            * [WORKAROUND]
+            * La api las devuelve con htpp y la libreria las necesita https, tambien intercepte unas
+            * urls que eran http://http2.mlstatic/path/imagen.jpg y cuando intentas acceder te dice
+            * que la pagina no existe por eso algunos productos salen como sin imagen
+            */
             val image = item.thumbnail.replace("http","https")
+
             Glide.with(context)
                 .load(image)
                 .centerCrop()

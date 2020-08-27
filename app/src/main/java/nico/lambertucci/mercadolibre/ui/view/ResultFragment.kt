@@ -32,6 +32,10 @@ import nico.lambertucci.mercadolibre.ui.utils.SearchUtils
 lateinit var selectedProduct: Result
 var globalQuery: String = ""
 
+/**
+ * @author Nicolas Lambertucci
+ * vista principal de la app.
+ */
 class ResultFragment : Fragment(), SearchUtils, LoadingBar {
 
     private lateinit var viewModel: ResultViewModel
@@ -71,6 +75,8 @@ class ResultFragment : Fragment(), SearchUtils, LoadingBar {
             this,
             Injection.getViewModelFactory()
         ).get(ResultViewModel::class.java)
+
+        //Primero chequeamos el estado de conexion del dispositivo y acorde a eso vemos que hacer
         if (NetworkConnection().isConnectedToInternet(requireContext())){
             hideLoadingBar()
             showNoSearches()
@@ -84,7 +90,8 @@ class ResultFragment : Fragment(), SearchUtils, LoadingBar {
 
     override fun onResume() {
         super.onResume()
-        //Guardo la ultima busqueda en una query global para que si quiere volver del detalle tenga su ultima busqueda.
+        /*Guardo la ultima busqueda en una query global para que si quiere volver del detalle
+        tenga su ultima busqueda y no aparezca la ui vacia. */
         if (globalQuery.isNotEmpty()) {
             searchProduct(globalQuery)
         }else{
@@ -112,6 +119,7 @@ class ResultFragment : Fragment(), SearchUtils, LoadingBar {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchItem.collapseActionView()
                 if (query != null) {
+                    //Primero guardo la query por si recurro al onResume y despues busco.
                     globalQuery = query
                     searchProduct(query)
                 }
@@ -125,6 +133,11 @@ class ResultFragment : Fragment(), SearchUtils, LoadingBar {
         })
     }
 
+    /**
+     * Este metodo se encarga de realizar la busqueda del producto elegido de manera asincrona
+     * usando coroutinas y una vez obtenido el resultado dibuja la vista.
+     * @param product producto que desea buscar el usuario
+     */
     private fun searchProduct(product: String) = lifecycleScope.launch {
         hideNoSearches()
         showLoadingBar()
